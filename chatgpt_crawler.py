@@ -1,5 +1,6 @@
 import tweepy
 from os import environ
+import time
 
 # Authenticate to Twitter
 try:
@@ -32,5 +33,5 @@ for tweet in tweepy.Cursor(api.user_timeline).items(10):
 for lang in ["en", "ko"]:
     for tweet in tweets[lang]:
         if tweet.id not in tweeted_ids and tweet.lang == lang:
-            print(f"https://twitter.com/twitter/statuses/{tweet.id}")
+            time.sleep(5)
             api.update_status(status=f"{tweet.text[:50]}, URL: https://twitter.com/twitter/statuses/{tweet.id}")
