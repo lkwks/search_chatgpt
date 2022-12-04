@@ -16,21 +16,24 @@ query = "ChatGPT min_retweets:10"
 max_tweets = 100
 
 # Search for tweets matching the query and store the results
-tweets = tweepy.Cursor(api.search_tweets, q=query, lang=["en", "ko"]).items(max_tweets)
+tweets = {}
+for lang in ["en", "ko"]:
+    tweets[lang] = tweepy.Cursor(api.search_tweets, q=query, lang=lang).items(max_tweets)
 
 
 # Get the list of tweet ids that have already been tweeted
 tweeted_ids = []
-for tweet in tweepy.Cursor(api.user_timeline).items(max_tweets):
+for tweet in tweepy.Cursor(api.user_timeline).items(10):
     tweeted_ids.append(tweet.id)
 
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
 
 i=0
-for tweet in tweets:
-    i += 1
-    if tweet.id not in tweeted_ids and (tweet.lang == "en" or tweet.lang == "ko"):
-        api.update_status(status=tweet_text[:100] + "URL: https://twitter.com/twitter/statuses/" + tweet.id)
+for lang in ["en", "ko"]:
+    for tweet in tweets[lang]:
+        i += 1
+        if tweet.id not in tweeted_ids and tweet.lang == lang:
+            api.update_status(status=tweet_text[:100] + "URL: https://twitter.com/twitter/statuses/" + tweet.id)
 
 print(i, len(tweeted_ids))
