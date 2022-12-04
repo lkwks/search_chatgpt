@@ -29,11 +29,8 @@ for tweet in tweepy.Cursor(api.user_timeline).items(10):
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
 
-i=0
 for lang in ["en", "ko"]:
     for tweet in tweets[lang]:
-        i += 1
         if tweet.id not in tweeted_ids and tweet.lang == lang:
+            print(f"https://twitter.com/twitter/statuses/{tweet.id}")
             api.update_status(status=f"{tweet.text[:50]}, URL: https://twitter.com/twitter/statuses/{tweet.id}")
-
-print(i, len(tweeted_ids))
