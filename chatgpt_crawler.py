@@ -18,6 +18,8 @@ max_tweets = 100
 # Search for tweets matching the query and store the results
 tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en,ko").items(max_tweets)
 
+print(len(tweets))
+
 # Get the list of tweet ids that have already been tweeted
 tweeted_ids = []
 for tweet in tweepy.Cursor(api.user_timeline).items(max_tweets):
