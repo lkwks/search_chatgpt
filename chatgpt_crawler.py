@@ -18,7 +18,6 @@ max_tweets = 100
 # Search for tweets matching the query and store the results
 tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en,ko").items(max_tweets)
 
-print(len(tweets))
 
 # Get the list of tweet ids that have already been tweeted
 tweeted_ids = []
@@ -27,6 +26,11 @@ for tweet in tweepy.Cursor(api.user_timeline).items(max_tweets):
 
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
+
+i=0
 for tweet in tweets:
+    i += 1
     if tweet.id not in tweeted_ids and (tweet.lang == "en" or tweet.lang == "ko"):
         api.update_status(status=tweet.url, in_reply_to_status_id=tweet.id)
+
+print(i, len(tweeted_ids))
