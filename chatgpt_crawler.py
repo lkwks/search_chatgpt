@@ -34,6 +34,6 @@ for lang in ["en", "ko"]:
     for tweet in tweets[lang]:
         i += 1
         if tweet.id not in tweeted_ids and tweet.lang == lang:
-            api.update_status(status=tweet.text[:100] + "URL: https://twitter.com/twitter/statuses/" + tweet.id)
+            api.f"{update_status(status=tweet.text[:100]}, URL: https://twitter.com/twitter/statuses/{tweet.id}")
 
 print(i, len(tweeted_ids))
