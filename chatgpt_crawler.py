@@ -16,7 +16,7 @@ query = "ChatGPT min_retweets:10"
 max_tweets = 100
 
 # Search for tweets matching the query and store the results
-tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en").items(max_tweets)
+tweets = tweepy.Cursor(api.search_tweets, q=query, lang=["en", "ko"]).items(max_tweets)
 
 
 # Get the list of tweet ids that have already been tweeted
@@ -31,6 +31,6 @@ i=0
 for tweet in tweets:
     i += 1
     if tweet.id not in tweeted_ids and (tweet.lang == "en" or tweet.lang == "ko"):
-        api.update_status(status=tweet.url, in_reply_to_status_id=tweet.id)
+        api.update_status(status=tweet_text[:100] + "URL: https://twitter.com/twitter/statuses/" + tweet.id)
 
 print(i, len(tweeted_ids))
