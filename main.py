@@ -31,14 +31,15 @@ for tweet in tweepy.Cursor(api.user_timeline).items(get_my_tweets_n):
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
 i = 1
-for my_tweet in my_tweets:
-    if f"https://twitter.com/twitter/statuses/{tweet.id}" in my_tweet:
-        break
-else:
-    time.sleep(5)
-    try:
-        api.update_status(status=f"https://twitter.com/twitter/statuses/{tweet.id}")
-        print(f"tweeting {i}th tweet completed.")
-        i += 1
-    except Exception as e:
-        print(e)
+for tweet in tweets:
+    for my_tweet in my_tweets:
+        if f"https://twitter.com/twitter/statuses/{tweet.id}" in my_tweet:
+            break
+    else:
+        time.sleep(5)
+        try:
+            api.update_status(status=f"https://twitter.com/twitter/statuses/{tweet.id}")
+            print(f"tweeting {i}th tweet completed.")
+            i += 1
+        except Exception as e:
+            print(e)
