@@ -28,6 +28,8 @@ my_tweets = []
 for tweet in tweepy.Cursor(api.user_timeline).items(get_my_tweets_n):
     tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text).group()
     my_tweets.append(requests.get(tco_url, allow_redirects=True).url)
+    print(my_tweets[-1])
+    break
 
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
@@ -43,4 +45,4 @@ for tweet in tweets:
             print(f"tweeting {i}th tweet completed.")
             i += 1
         except Exception as e:
-            print(e, my_tweets[-1])
+            print(e)
