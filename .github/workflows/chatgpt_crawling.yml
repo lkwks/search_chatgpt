@@ -1,4 +1,4 @@
-name: ChatGPT Crawler
+name: Twitter search bot
 
 on:
   schedule:
@@ -11,12 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
-      - run: |
-          pip install --upgrade pip
-          pip install tweepy
-      - run: python chatgpt_crawler.py
+      - run: pip install tweepy
+      - run: python main.py
         env: 
           consumer_key: ${{secrets.API_KEY}}
           consumer_secret: ${{secrets.API_KEY_SECRET}}
           access_token: ${{secrets.ACCESS_TOKEN}}
           access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
+          search_keyword: ${{secrets.SEARCH_KEYWORD}}
+          min_retweets: 100
+          tweets_to_update: 50
+          get_my_tweet_n: 500
