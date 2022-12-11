@@ -22,11 +22,11 @@ jobs:
         env:
           min_retweets: 10
           tweets_to_update: 50
-          get_my_tweet_n: 500
+          get_my_tweets_n: 500
           search_lang: ko
       - run: python main.py
         env:
           min_retweets: 100
           tweets_to_update: 50
-          get_my_tweet_n: 500
+          get_my_tweets_n: 500
           search_lang: en          
