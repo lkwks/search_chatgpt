@@ -1,4 +1,4 @@
-import tweepy, time, datetime
+import tweepy, time, datetime, requests, re
 from os import environ
 
 # Put search keyword and retweet numbers 
@@ -26,14 +26,15 @@ tweets = tweepy.Cursor(api.search_tweets, q=query, lang=lang).items(tweets_to_up
 # Get the list of tweet ids that have already been tweeted
 my_tweets = []
 for tweet in tweepy.Cursor(api.user_timeline).items(get_my_tweets_n):
-    my_tweets.append(tweet.text)
+    tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.txt).group()
+    my_tweets.append(requests.get(tco_url, allow_redirects=True).url)
 
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
 i = 1
 for tweet in tweets:
     for my_tweet in my_tweets:
-        if f"https://twitter.com/twitter/statuses/{tweet.id}" in my_tweet:
+        if f"{tweet.id}" in my_tweet:
             break
     else:
         time.sleep(5)
@@ -42,4 +43,4 @@ for tweet in tweets:
             print(f"tweeting {i}th tweet completed.")
             i += 1
         except Exception as e:
-            print(e, tweet.id, len(my_tweets), my_tweets[-1])
+            print(e, my_tweets[-1])
