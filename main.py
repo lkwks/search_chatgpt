@@ -26,7 +26,7 @@ tweets = tweepy.Cursor(api.search_tweets, q=query, lang=lang).items(tweets_to_up
 # Get the list of tweet ids that have already been tweeted
 my_tweets = []
 for tweet in tweepy.Cursor(api.user_timeline).items(get_my_tweets_n):
-    tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.txt).group()
+    tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text).group()
     my_tweets.append(requests.get(tco_url, allow_redirects=True).url)
 
 # Iterate over the tweets and tweet each one to the private account
