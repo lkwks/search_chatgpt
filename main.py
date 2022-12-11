@@ -4,7 +4,7 @@ from os import environ
 # Put search keyword and retweet numbers 
 search_keyword = environ["search_keyword"]
 min_retweets = int(environ["min_retweets"])
-tweets_to_update = int(environ["tweets_to_udpate"])
+tweets_to_update = int(environ["tweets_to_update"])
 get_my_tweets_n = int(environ["get_my_tweets_n"])
 lang = environ["search_lang"]
 
