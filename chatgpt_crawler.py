@@ -1,6 +1,11 @@
-import tweepy
+import tweepy, time, datetime
 from os import environ
-import time
+
+# Put search keyword and retweet numbers 
+search_keyword = environ["search_keyword"]
+min_retweets = int(environ["min_retweets"])
+tweets_to_update = int(environ["tweets_to_udpate"])
+get_my_tweets_n = int(environ["get_my_tweets_n"])
 
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
@@ -10,23 +15,22 @@ auth.set_access_token(environ["access_token"], environ["access_token_secret"])
 api = tweepy.API(auth)
 
 # Define the search query and the maximum number of tweets to retrieve
-query = "ChatGPT min_retweets:10"
-max_tweets = 20
+now_date = datetime.datetime.now()
+search_date = datetime.datetime(now_date.year, now_date.month, now_date.day-1).strftime('%Y-%m-%d')
+query = f"{search_keyword} min_retweets:{min_retweets} since:{search_date}"
 
 # Search for tweets matching the query and store the results
 tweets = {}
 for lang in ["en", "ko"]:
-    tweets[lang] = tweepy.Cursor(api.search_tweets, q=query, lang=lang).items(max_tweets)
-
+    tweets[lang] = tweepy.Cursor(api.search_tweets, q=query, lang=lang).items(tweets_to_update)
 
 # Get the list of tweet ids that have already been tweeted
 my_tweets = []
-for tweet in tweepy.Cursor(api.user_timeline).items(100):
+for tweet in tweepy.Cursor(api.user_timeline).items(get_my_tweets_n):
     my_tweets.append(tweet.text)
 
 # Iterate over the tweets and tweet each one to the private account
 # if it hasn't already been tweeted and if it's written in English
-
 i = 1
 for lang in ["en", "ko"]:
     for tweet in tweets[lang]:
@@ -37,7 +41,7 @@ for lang in ["en", "ko"]:
             time.sleep(5)
             try:
                 api.update_status(status=f"https://twitter.com/twitter/statuses/{tweet.id}")
-                i += 1
                 print(f"tweeting {i}th tweet completed.")
+                i += 1
             except Exception as e:
                 print(e)
