@@ -8,17 +8,23 @@ on:
 jobs:
   run_crawler:
     runs-on: ubuntu-latest
+    env: 
+      consumer_key: ${{secrets.API_KEY}}
+      consumer_secret: ${{secrets.API_KEY_SECRET}}
+      access_token: ${{secrets.ACCESS_TOKEN}}
+      access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
+      search_keyword: ${{secrets.SEARCH_KEYWORD}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
       - run: pip install tweepy
       - run: python main.py
-        env: 
-          consumer_key: ${{secrets.API_KEY}}
-          consumer_secret: ${{secrets.API_KEY_SECRET}}
-          access_token: ${{secrets.ACCESS_TOKEN}}
-          access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
-          search_keyword: ${{secrets.SEARCH_KEYWORD}}
+          min_retweets: 10
+          tweets_to_update: 50
+          get_my_tweet_n: 500
+          search_lang: ko
+      - run: python main.py
           min_retweets: 100
           tweets_to_update: 50
           get_my_tweet_n: 500
+          search_lang: en          
