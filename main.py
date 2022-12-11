@@ -42,4 +42,4 @@ for tweet in tweets:
             print(f"tweeting {i}th tweet completed.")
             i += 1
         except Exception as e:
-            print(e)
+            print(e, tweet.id, len(my_tweets), my_tweets[-1])
