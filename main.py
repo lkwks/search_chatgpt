@@ -1,4 +1,4 @@
-import tweepy, time, datetime, requests, re
+import tweepy, datetime, requests
 from os import environ
 
 # Put search keyword and retweet numbers 
