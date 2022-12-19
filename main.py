@@ -14,9 +14,9 @@ auth.set_access_token(environ["access_token"], environ["access_token_secret"])
 api = tweepy.API(auth)
 
 # Define the search query
-now_date = datetime.datetime.now()
-search_date = datetime.datetime(now_date.year, now_date.month, now_date.day-1).strftime('%Y-%m-%d')
-query = f"{search_keyword} min_retweets:{min_retweets} since:{search_date}"
+search_date = datetime.datetime.now() - datetime.timedelta(days=1)
+search_date_str = search_date.strftime('%Y-%m-%d')
+query = f"{search_keyword} min_retweets:{min_retweets} since:{search_date_str}"
 
 # Iterate over the tweets and retweet
 for tweet in tweepy.Cursor(api.search_tweets, q=query, lang=environ["search_lang"]).items(tweets_to_update):
