@@ -1,0 +1,21 @@
+name: Scraper
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run_crawler:
+    runs-on: ubuntu-latest
+    env: 
+      consumer_key: ${{secrets.API_KEY}}
+      consumer_secret: ${{secrets.API_KEY_SECRET}}
+      access_token: ${{secrets.ACCESS_TOKEN}}
+      access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
+      site_url: ${{secrets.SITE_URL}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+      - run: pip install tweepy selenium
+      - run: python scraper.py
