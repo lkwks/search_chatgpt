@@ -36,7 +36,7 @@ try:
         written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
         if written_date == "": continue
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
-        if diff <= datetime.timedelta(days=int(environ["check_period"])):
+        if diff <= datetime.timedelta(hours=int(environ["check_period"])):
             title_elem = elem.find_element(By.XPATH, './td[3]/a[1]')
             tweet_update(f"{title_elem.text} {title_elem.get_attribute('href')}")
     
