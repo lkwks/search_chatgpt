@@ -27,7 +27,7 @@ try:
     driver = webdriver.Chrome('chromedriver', chrome_options=options)
     driver.implicitly_wait(3)    
     
-    driver.get(environ["site_url"))
+    driver.get(environ["site_url"])
     driver.maximize_window()    
 
     article_elements = driver.find_elements('//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr')
