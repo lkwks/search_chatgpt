@@ -37,8 +37,7 @@ try:
         if written_date == "": continue
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
         if diff <= datetime.timedelta(hours=int(environ["check_period"])):
-            title_elem = elem.find_element(By.XPATH, './td[3]/a[1]')
-            tweet_update(f"{title_elem.text} {title_elem.get_attribute('href')}")
+            tweet_update(f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}")
     
 
 except Exception as e:
