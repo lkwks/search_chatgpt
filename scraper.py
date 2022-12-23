@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from os import environ
 import tweepy
 
@@ -30,7 +31,7 @@ try:
     driver.get(environ["site_url"])
     driver.maximize_window()    
 
-    article_elements = driver.find_elements('//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr')
+    article_elements = driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr')
     for elem in article_elements:
         print(elem)
     
