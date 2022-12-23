@@ -6,7 +6,6 @@ import datetime
 
 
 def tweet_update(msg: str) -> None:
-    if weather_msg == "": return
     auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
     auth.set_access_token(environ["access_token"], environ["access_token_secret"])
     api = tweepy.API(auth)
