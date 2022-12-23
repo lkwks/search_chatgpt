@@ -35,7 +35,7 @@ try:
     article_elements = driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr')
     for elem in article_elements:
         written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
-        print(written_date)
+        if written_date == "": continue
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
         if diff <= datetime.timedelta(hours=int(environ["check_period"])):
             title_elem = elem.find_element(By.XPATH, './td[3]/a[1]')
