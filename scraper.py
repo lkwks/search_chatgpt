@@ -17,8 +17,9 @@ def scrape_page():
     
     my_tweets = []
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
-        tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text).group()
-        my_tweets.append(requests.get(tco_url, allow_redirects=True).url)
+        tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
+        if tco_url_search:
+            my_tweets.append(requests.get(tco_url_search.group(), allow_redirects=True).url)
         
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
