@@ -5,16 +5,21 @@ import tweepy
 import datetime
 
 
-def tweet_update(msg: str) -> None:
-    auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
-    auth.set_access_token(environ["access_token"], environ["access_token_secret"])
-    api = tweepy.API(auth)
+def tweet_update(api, msg: str) -> None:
     try:
         api.update_status(status=msg)
     except Exception as e:
         print(e)
 
 def scrape_page():
+    auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
+    auth.set_access_token(environ["access_token"], environ["access_token_secret"])
+    api = tweepy.API(auth)
+    
+    my_tweets = []
+    for tweet in tweepy.Cursor(api.user_timeline).items(100):
+        my_tweets.append(tweet.text)
+
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("lang=ko_KR")
@@ -23,20 +28,23 @@ def scrape_page():
     options.add_argument("disable-gpu")
     options.add_argument("--no-sandbox")
 
-    # chrome driver
     driver = webdriver.Chrome('chromedriver', chrome_options=options)
     driver.implicitly_wait(3)    
     
     driver.get(environ["site_url"])
     driver.maximize_window()    
 
-    article_elements = driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr')
-    for elem in article_elements:
+    for elem in driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr'):
         written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
         if written_date == "": continue
+            
+        href = f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}"
+        if href in my_tweets: continue
+        
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
-        if diff <= datetime.timedelta(hours=24):
-            tweet_update(f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}")
+        if diff > datetime.timedelta(hours=24): continue
+            
+        tweet_update(api, href)
   
     driver.quit()
 
