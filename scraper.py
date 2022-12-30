@@ -14,8 +14,7 @@ def tweet_update(msg: str) -> None:
     except Exception as e:
         print(e)
 
-try:
-
+def scrape_page():
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("lang=ko_KR")
@@ -36,14 +35,9 @@ try:
         written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
         if written_date == "": continue
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
-        if diff <= datetime.timedelta(hours=int(environ["check_period"])):
+        if diff <= datetime.timedelta(hours=24):
             tweet_update(f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}")
-    
-
-except Exception as e:
-    print(e)    
+  
     driver.quit()
 
-finally:
-    print("finally...")
-    driver.quit()
+scrape_page()
