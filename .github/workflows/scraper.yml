@@ -14,7 +14,6 @@ jobs:
       access_token: ${{secrets.ACCESS_TOKEN}}
       access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
       site_url: ${{secrets.SITE_URL}}
-      check_period: 12
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
