@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from os import environ
-import tweepy
-import datetime
+import tweepy, datetime, requests, re
 
 
 def tweet_update(api, msg: str) -> None:
@@ -18,8 +17,9 @@ def scrape_page():
     
     my_tweets = []
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
-        my_tweets.append(tweet.text)
-
+        tco_url = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text).group()
+        my_tweets.append(requests.get(tco_url, allow_redirects=True).url)
+        
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("lang=ko_KR")
