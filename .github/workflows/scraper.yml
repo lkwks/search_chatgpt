@@ -13,7 +13,6 @@ jobs:
       consumer_secret: ${{secrets.API_KEY_SECRET}}
       access_token: ${{secrets.ACCESS_TOKEN}}
       access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
-      site_url: ${{secrets.SITE_URL}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
@@ -26,3 +25,9 @@ jobs:
           unzip ./chromedriver_linux64.zip         
       - run: pip install tweepy selenium
       - run: python ./scraper.py
+        env:
+          site_url: ${{secrets.SITE_URL}}
+      - run: python ./scraper.py
+        env:
+          site_url: ${{secrets.SITE_URL2}}
+
