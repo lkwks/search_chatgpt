@@ -43,7 +43,6 @@ def scrape_page():
         if href in my_tweets: continue
         
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
-        print(diff, href)
         if diff > datetime.timedelta(hours=24): continue
             
         tweet_update(api, href)
