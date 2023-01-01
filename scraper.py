@@ -10,6 +10,10 @@ def tweet_update(api, msg: str) -> None:
     except Exception as e:
         print(e)
 
+def get_no(url: str) -> int:
+    no_search = re.search(r'(?<=no=)\d+(?=&)', tco_url)
+    return int(no_search.group()) if no_search else -1
+        
 def scrape_page():
     auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
     auth.set_access_token(environ["access_token"], environ["access_token_secret"])
@@ -19,7 +23,7 @@ def scrape_page():
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
-            my_tweets.append(requests.get(tco_url_search.group(), allow_redirects=True).url)
+            my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True).url))
         
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
@@ -40,7 +44,8 @@ def scrape_page():
         if written_date == "": continue
             
         href = f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}"
-        if href in my_tweets: continue
+        article_n = get_no(href)
+        if article_n in my_tweets or article_n == -1: continue
         
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
         if diff > datetime.timedelta(hours=24): continue
