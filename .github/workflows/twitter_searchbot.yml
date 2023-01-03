@@ -23,7 +23,7 @@ jobs:
           search_keyword: ${{secrets.SEARCH_KEYWORD}}
       - run: python main.py
         env:
-          min_retweets: 100
+          min_retweets: 300
           search_lang: en          
           search_keyword: ${{secrets.SEARCH_KEYWORD}}
       - run: python main.py
