@@ -1,11 +1,12 @@
 import tweepy, datetime, requests
 from os import environ
 
-# Put search keyword and retweet numbers 
-search_keyword = environ["search_keyword"]
-search_account = environ["search_account"]
-min_retweets = int(environ["min_retweets"])
-tweets_to_update = int(environ["tweets_to_update"])
+# workflow 설정 변경 가능한 환경변수들.
+min_retweets = 1 if "min_retweets" not in environ else int(environ["min_retweets"])
+search_lang = "ko" if "search_lang" not in environ else environ["search_lang"]
+tweets_to_update = 100 if "tweets_to_update" not in environ else int(environ["tweets_to_update"])
+search_keyword = "" if "search_keyword" not in environ else environ["search_keyword"]
+search_account = "" if "search_account" not in environ else f" from:{environ["search_account"]}"
 
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler(environ["consumer_key"], environ["consumer_secret"])
@@ -17,17 +18,10 @@ api = tweepy.API(auth)
 # Define the search query
 search_date = datetime.datetime.now() - datetime.timedelta(days=1)
 search_date_str = search_date.strftime('%Y-%m-%d')
+query = f"{search_keyword} min_retweets:{min_retweets} since:{search_date_str}{search_account}"
 
-query = f" min_retweets:{min_retweets} since:{search_date_str} "
-
-if search_keyword != ".":
-    query = f"{search_keyword} {query}"
-
-if search_account != ".":
-    query = f"{query} from:{search_account}"
-    
 # Iterate over the tweets and retweet
-for tweet in tweepy.Cursor(api.search_tweets, q=query, lang=environ["search_lang"]).items(tweets_to_update):
+for tweet in tweepy.Cursor(api.search_tweets, q=query, lang=search_lang).items(tweets_to_update):
     try:
         api.retweet(tweet.id)
     except Exception as e:
