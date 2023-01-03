@@ -3,6 +3,7 @@ from os import environ
 
 # Put search keyword and retweet numbers 
 search_keyword = environ["search_keyword"]
+search_account = environ["search_account"]
 min_retweets = int(environ["min_retweets"])
 tweets_to_update = int(environ["tweets_to_update"])
 
@@ -16,8 +17,15 @@ api = tweepy.API(auth)
 # Define the search query
 search_date = datetime.datetime.now() - datetime.timedelta(days=1)
 search_date_str = search_date.strftime('%Y-%m-%d')
-query = f"{search_keyword} min_retweets:{min_retweets} since:{search_date_str}"
 
+query = f" min_retweets:{min_retweets} since:{search_date_str} "
+
+if search_keyword != ".":
+    query = f"{search_keyword} {query}"
+
+if search_account != ".":
+    query = f"{query} from:{search_account}"
+    
 # Iterate over the tweets and retweet
 for tweet in tweepy.Cursor(api.search_tweets, q=query, lang=environ["search_lang"]).items(tweets_to_update):
     try:
