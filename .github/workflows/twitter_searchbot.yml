@@ -13,7 +13,6 @@ jobs:
       consumer_secret: ${{secrets.API_KEY_SECRET}}
       access_token: ${{secrets.ACCESS_TOKEN}}
       access_token_secret: ${{secrets.ACCESS_TOKEN_SECRET}}
-      search_keyword: ${{secrets.SEARCH_KEYWORD}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
@@ -21,12 +20,13 @@ jobs:
       - run: python main.py
         env:
           min_retweets: 10
-          tweets_to_update: 50
-          get_my_tweets_n: 500
-          search_lang: ko
+          search_keyword: ${{secrets.SEARCH_KEYWORD}}
       - run: python main.py
         env:
           min_retweets: 100
-          tweets_to_update: 50
-          get_my_tweets_n: 500
           search_lang: en          
+          search_keyword: ${{secrets.SEARCH_KEYWORD}}
+      - run: python main.py
+        env:
+          min_retweets: 10
+          search_account: ${{secrets.SEARCH_ACCOUNT}}
