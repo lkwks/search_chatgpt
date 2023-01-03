@@ -4,7 +4,7 @@ from os import environ
 # workflow 설정 변경 가능한 환경변수들.
 min_retweets = 1 if "min_retweets" not in environ else int(environ["min_retweets"])
 search_lang = "ko" if "search_lang" not in environ else environ["search_lang"]
-tweets_to_update = 100 if "tweets_to_update" not in environ else int(environ["tweets_to_update"])
+tweets_to_update = 50 if "tweets_to_update" not in environ else int(environ["tweets_to_update"])
 search_keyword = "" if "search_keyword" not in environ else environ["search_keyword"]
 search_account = "" if "search_account" not in environ else f" from:{environ["search_account"]}"
 
