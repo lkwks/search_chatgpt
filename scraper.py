@@ -23,6 +23,7 @@ def scrape_page():
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
+            print(tco_url_search.group())
             my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True).url))
         
     options = webdriver.ChromeOptions()
