@@ -50,7 +50,9 @@ def scrape_page():
         
         diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
         if diff > datetime.timedelta(hours=24): continue
-            
+        
+        if "search_keyword" in environ and environ["search_keyword"] not in elem.find_element(By.XPATH, './td[3]/a[1]').text: continue
+        
         tweet_update(api, href)
   
     driver.quit()
