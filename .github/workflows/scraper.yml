@@ -29,8 +29,5 @@ jobs:
           site_url: ${{secrets.SITE_URL}}
       - run: python ./scraper.py
         env:
-          site_url: ${{secrets.SITE_URL2}}
-      - run: python ./scraper.py
-        env:
           site_url: ${{secrets.SITE_URL}}
           search_keyword: ${{secrets.SEARCH_KEYWORD_INS}}
