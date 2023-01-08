@@ -52,7 +52,7 @@ def scrape_page():
         
         if "search_keyword" in environ:
             if environ["search_keyword"] not in elem.find_element(By.XPATH, './td[3]/a[1]').text: continue
-            if len(elem.find_element(By.XPATH, './td[3]/a[1]').text) > 12: continue
+            if len(elem.find_element(By.XPATH, './td[3]/a[1]').text) > 20: continue
         
         tweet_update(api, href)
   
