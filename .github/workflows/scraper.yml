@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v3
-      - run: pip install tweepy
+      - run: pip install tweepy beautifulsoup4
       - run: python ./scraper.py
         env:
           site_url: ${{secrets.SITE_URL}}
