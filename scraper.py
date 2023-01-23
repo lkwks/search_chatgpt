@@ -22,7 +22,10 @@ def scrape_page():
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
-            my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/605.1.15',}).url))
+            try: 
+                my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/605.1.15',}).url))
+            except Exception as e:
+                print(e)
     
     soup = BeautifulSoup(requests.get(environ["site_url"]).text, 'html.parser')
 
