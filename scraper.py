@@ -13,6 +13,7 @@ def tweet_update(api, msg: str) -> None:
 def get_no(url: str) -> int:
     print(url)
     no_search = re.search(r'(?<=no=)\d+(?=&)', url)
+    print(no_search.group() if no_search else -1)
     return int(no_search.group()) if no_search else -1
         
 def scrape_page():
@@ -25,7 +26,7 @@ def scrape_page():
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
             try: 
-                my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/605.1.15',}).url))
+                my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True).url))
             except Exception as e:
                 print(e)
     print(my_tweets)
