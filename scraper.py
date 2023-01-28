@@ -27,7 +27,9 @@ def scrape_page():
             except Exception as e:
                 print(e)
     
-    soup = BeautifulSoup(requests.get(environ["site_url"]).text, 'html.parser')
+    html_txt = requests.get(environ["site_url"]).text
+    print(len(html_txt))
+    soup = BeautifulSoup(html_txt, 'html.parser')
 
     for elem in soup.select('#container > section:nth-of-type(1) > article:nth-of-type(2) > div:nth-of-type(2) > table > tbody > tr'):
         written_date = elem.select_one('td:nth-of-type(5)')['title']
