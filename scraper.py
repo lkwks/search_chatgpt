@@ -23,8 +23,11 @@ def scrape_page():
     for tweet in tweepy.Cursor(api.user_timeline).items(100):
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
-            my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True).url))
-        
+            try: 
+                my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/605.1.15',}).url))
+            except Exception as e:
+                print(e)
+                
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("lang=ko_KR")
@@ -36,26 +39,29 @@ def scrape_page():
     driver = webdriver.Chrome('chromedriver', chrome_options=options)
     driver.implicitly_wait(3)    
     
-    driver.get(environ["site_url"])
-    driver.maximize_window()    
+    try:
+        driver.get(environ["site_url"])
+        driver.maximize_window()    
 
-    for elem in driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr'):
-        written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
-        if written_date == "": continue
+        for elem in driver.find_elements(By.XPATH, '//*[@id="container"]/section[1]/article[2]/div[2]/table/tbody/tr'):
+            written_date = elem.find_element(By.XPATH, 'td[5]').get_attribute('title')
+            if written_date == "": continue
             
-        href = f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}"
-        article_n = get_no(href)
-        if article_n in my_tweets or article_n == -1: continue
+            href = f"{elem.find_element(By.XPATH, './td[3]/a[1]').get_attribute('href')}"
+            article_n = get_no(href)
+            if article_n in my_tweets or article_n == -1: continue
         
-        diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
-        if diff > datetime.timedelta(hours=24): continue
+            diff = datetime.datetime.now() - datetime.datetime.strptime(str(written_date), "%Y-%m-%d %H:%M:%S")
+            if diff > datetime.timedelta(hours=24): continue
         
-        if "search_keyword" in environ:
-            if environ["search_keyword"] not in elem.find_element(By.XPATH, './td[3]/a[1]').text: continue
-            if len(elem.find_element(By.XPATH, './td[3]/a[1]').text) > 20: continue
+            if "search_keyword" in environ:
+                if environ["search_keyword"] not in elem.find_element(By.XPATH, './td[3]/a[1]').text: continue
+                if len(elem.find_element(By.XPATH, './td[3]/a[1]').text) > 20: continue
         
-        tweet_update(api, href)
-  
+            tweet_update(api, href)
+    except Exception as e:
+        print(e)
+        
     driver.quit()
 
 scrape_page()
