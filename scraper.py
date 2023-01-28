@@ -11,9 +11,7 @@ def tweet_update(api, msg: str) -> None:
         print(e)
 
 def get_no(url: str) -> int:
-    print(url)
     no_search = re.search(r'(?<=no=)\d+(?=&)', url)
-    print(no_search.group() if no_search else -1)
     return int(no_search.group()) if no_search else -1
         
 def scrape_page():
@@ -29,7 +27,6 @@ def scrape_page():
                 my_tweets.append(get_no(requests.get(tco_url_search.group(), allow_redirects=True).url))
             except Exception as e:
                 print(e)
-    print(my_tweets)
                 
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
