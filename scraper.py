@@ -11,6 +11,7 @@ def tweet_update(api, msg: str) -> None:
         print(e)
 
 def get_no(url: str) -> int:
+    print(url)
     no_search = re.search(r'(?<=no=)\d+(?=&)', url)
     return int(no_search.group()) if no_search else -1
         
