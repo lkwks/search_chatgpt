@@ -20,7 +20,7 @@ def scrape_page():
     api = tweepy.API(auth)
     
     my_tweets = []
-    for tweet in tweepy.Cursor(api.user_timeline).items(10):
+    for tweet in tweepy.Cursor(api.user_timeline).items(50):
         tco_url_search = re.search(r'https://t\.co/[a-zA-Z0-9]+', tweet.text)
         if tco_url_search:
             try: 
