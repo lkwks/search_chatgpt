@@ -19,11 +19,11 @@ jobs:
       - run: pip install tweepy
       - run: python main.py
         env:
-          min_retweets: 10
+          min_retweets: 50
           search_keyword: ${{secrets.SEARCH_KEYWORD}}
       - run: python main.py
         env:
-          min_retweets: 700
+          min_retweets: 1000
           search_lang: en          
           search_keyword: ${{secrets.SEARCH_KEYWORD}}
       - run: python main.py
